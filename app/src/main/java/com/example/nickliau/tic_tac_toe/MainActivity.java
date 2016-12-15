@@ -1,5 +1,6 @@
 package com.example.nickliau.tic_tac_toe;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         //red: false, yellow: true
         boolean color ;
 
+        View view;
+
     }
 
     playeronposition player[] = new playeronposition[]{
@@ -70,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
             player[i].isSelect = false;
             player[i].player = false;
             player[i].color = false;
+            if (player[i].view != null)
+                player[i].view.setBackgroundColor(Color.TRANSPARENT);
+            player[i].view = null;
         }
 
         for (int j = 0; j< mgridLayout.getChildCount(); j++) {
@@ -79,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout layout = (LinearLayout)findViewById(R.id.playAgainLayout);
         layout.setVisibility(View.INVISIBLE);
 
-        switchplayer = false;
+        switchplayer = true;
     }
 
     public void dropIn(View view) {
@@ -94,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         player[tappedCounter].isSelect = true;
         player[tappedCounter].player = switchplayer;
         player[tappedCounter].color = switchplayer;
+        player[tappedCounter].view = view;
 
         //Show image view on user select position
         if (switchplayer) {
@@ -101,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             position.setImageResource(R.drawable.red);
         }
-        //position.animate().translationYBy(1000f).rotation(360).setDuration(300);
+        position.animate().translationYBy(1000f).translationY(0).rotation(360).setDuration(100);
 
         // Is this move win this game?
         for (int[] winningPosition : sWinningPositions) {
@@ -109,7 +116,11 @@ public class MainActivity extends AppCompatActivity {
                     && player[winningPosition[2]].isSelect) {
                 if (player[winningPosition[0]].player == switchplayer &&
                         player[winningPosition[1]].player == switchplayer &&
-                        player[winningPosition[1]].player == switchplayer) {
+                        player[winningPosition[2]].player == switchplayer) {
+                    player[winningPosition[0]].view.setBackgroundColor(Color.GREEN);
+                    player[winningPosition[1]].view.setBackgroundColor(Color.GREEN);
+                    player[winningPosition[2]].view.setBackgroundColor(Color.GREEN);
+
                     String Winner = "Winner is " + (switchplayer ? "Player 0" : "Player 1");
                     //We hava a winner
                     Log.i (TAG, Winner);
@@ -137,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
             winnerMessage.setText("No Winner, This is the final move");
             LinearLayout layout = (LinearLayout)findViewById(R.id.playAgainLayout);
             layout.setVisibility(View.VISIBLE);
-            return;
         }
 
         // Next player

@@ -21,7 +21,7 @@
         android:visibility="invisible">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="252dp"
             android:layout_height="wrap_content"
             android:text="New Text"
             android:id="@+id/winnerMessage"
@@ -29,8 +29,8 @@
             android:textSize="30sp" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_width="133dp"
+            android:layout_height="match_parent"
             android:text="Play Again"
             android:id="@+id/playAgainButton"
             android:layout_gravity="center_horizontal"
