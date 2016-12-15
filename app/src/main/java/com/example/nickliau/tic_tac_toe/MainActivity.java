@@ -26,11 +26,11 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
     public static String TAG = "tictactoe";
     GridLayout mgridLayout;
-//    ImageView mIV[];
-//    int mItem;
 
     // true : player 0, false : player 1
     boolean switchplayer;
+
+    boolean finalmove;
 
     public class playeronposition {
         // This position is selected by played or not
@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
         boolean color ;
 
         View view;
-
     }
 
     playeronposition player[] = new playeronposition[]{
@@ -57,19 +56,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        List<playeronposition> mm = new ArrayList<playeronposition>();
-//        mm.add(new playeronposition());
 
         mgridLayout = (GridLayout)findViewById(R.id.gridLayout);
-        //player = new playeronposition[9];
 
         init_tic_tac_toe(null);
     }
 
     public void init_tic_tac_toe(View view)  {
-
+        Log.i (TAG, "initial tic tac toe view");
         for (int i = 0; i < 9 ; i++) {
-            Log.e(TAG, "ini " + i);
             player[i].isSelect = false;
             player[i].player = false;
             player[i].color = false;
@@ -86,12 +81,16 @@ public class MainActivity extends AppCompatActivity {
         layout.setVisibility(View.INVISIBLE);
 
         switchplayer = true;
+        finalmove = false;
     }
 
     public void dropIn(View view) {
         ImageView position = (ImageView) view;
         int tappedCounter = Integer.parseInt(position.getTag().toString());
         boolean gameover = true;
+
+        if (finalmove)
+            return;
 
         if (player[tappedCounter].isSelect) {
             return;
@@ -108,7 +107,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             position.setImageResource(R.drawable.red);
         }
-        position.animate().translationYBy(1000f).translationY(0).rotation(360).setDuration(100);
+        position.setTranslationY(-1000f);
+        position.animate().translationYBy(1000f).rotation(360).setDuration(100);
 
         // Is this move win this game?
         for (int[] winningPosition : sWinningPositions) {
@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
                     winnerMessage.setText(Winner);
                     LinearLayout layout = (LinearLayout)findViewById(R.id.playAgainLayout);
                     layout.setVisibility(View.VISIBLE);
+                    finalmove = true;
                     return;
                 }
             }
@@ -148,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
             winnerMessage.setText("No Winner, This is the final move");
             LinearLayout layout = (LinearLayout)findViewById(R.id.playAgainLayout);
             layout.setVisibility(View.VISIBLE);
+            finalmove = true;
         }
 
         // Next player
